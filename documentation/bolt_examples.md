@@ -58,7 +58,7 @@ To run Bolt commands against multiple nodes at once, you need to provide informa
           transport: winrm
           winrm:
             user: Administrator
-            Password: <ADD PASSWORD>
+            password: <ADD PASSWORD>
     ```
 
     **Note:** To have Bolt securely prompt for a password, use the `--password` or `-p` flag without supplying any value. This prevents the password from appearing in a process listing or on the console. Alternatively you can use the [``prompt` plugin`](inventory_file_v2.md#) to set configuration values via a prompt.
