@@ -166,7 +166,7 @@ groups:
       transport: winrm
       winrm:
         user: Administrator
-        Password: <ADD PASSWORD>
+        password: <ADD PASSWORD>
 ```
 
 5. To make sure that your inventory is configured correctly and that you can connect to all the target nodes, run the following command from inside the project directory: 
