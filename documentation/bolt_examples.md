@@ -146,15 +146,7 @@ In this example, you:
 
 2. To make the module a Bolt project directory, add a `bolt.yaml` file. 
 
-3. Add the following configuration to the `bolt.yaml` file. 
-
-```
-Modulepath: "./modules/:~/.puppetlabs/bolt-code/modules:~/.puppetlabs/bolt-code/site-modules"
-```
-
-This means that the project is going to support itself by deploying all module dependencies to a modules folder in the project. Note that you don’t have to create the `./modules` folder.
-
-4. Create an inventory file to store information about your nodes. This is stored as `inventory.yaml` by default in the project directory. Add the following code: 
+3. Create an inventory file to store information about your nodes. This is stored as `inventory.yaml` by default in the project directory. Add the following code: 
 
 ```
 groups:
@@ -169,7 +161,7 @@ groups:
         password: <ADD PASSWORD>
 ```
 
-5. To make sure that your inventory is configured correctly and that you can connect to all the target nodes, run the following command from inside the project directory: 
+4. To make sure that your inventory is configured correctly and that you can connect to all the target nodes, run the following command from inside the project directory: 
 
 ```
 bolt command run 'echo hi' --targets windows
@@ -206,15 +198,16 @@ Bolt uses a `Puppetfile` to install module content from the Forge. A `Puppetfile
 mod 'puppetlabs-chocolatey', '4.1.0'
 ## dependencies
 mod 'puppetlabs-stdlib', '4.13.1' #install latest
- mod 'puppetlabs-powershell', '2.3.0'
+mod 'puppetlabs-powershell', '2.3.0'
 mod 'puppetlabs-registry', '2.1.0'
         
 # Modules from Git
-# Examples: https://github.com/puppetlabs/r10k/blob/master/doc/puppetfile.mkd#examples
-#mod 'apache',
-#  :git    => 'https://github.com/puppetlabs/puppetlabs-apache',
-#  :commit => 'de290646f97e04b4b8e42c70f6e01e860c394ce7'     
+# mod 'apache',
+# :git    => 'https://github.com/puppetlabs/puppetlabs-apache',
+# :commit => 'de290646f97e04b4b8e42c70f6e01e860c394ce7'     
  ```
+
+Note that you can install modules from a number of different sources. For more information, see the [Puppetfile readme](https://github.com/puppetlabs/r10k/blob/master/doc/puppetfile.mkd#examples).
 
 2. Add the Puppetfile to a version control service, for example, Github.
 
@@ -235,12 +228,12 @@ After it runs, you can see a `modules` directory inside the project directory, c
 
 ### 3. Write a Bolt plan to apply Puppet code and orchestrate the deployment of a package resource using the Chocolatey provider. Plans allow you to run more than one task with a single command.
 
-1. Inside your project directory, in a file called `/plan/installer.pp`, create a plan called `puppet_chocolatey_tap::installer`. 
+1. Inside your project directory, in a file called `/plans/installer.pp`, create a plan called `puppet_chocolatey_tap::installer`. 
 
 The folder tree should look like this:
 
 ```
-├──plan
+├──plans
    └── installer.pp 
 ```
 
@@ -248,25 +241,23 @@ The folder tree should look like this:
 
 ```
 plan puppet_choco_tap::installer(
-   TargetSpec                                   $nodes,
-   String                                       $package,
-   Variant[Enum['absent', 'present'], String ]  $ensure = 'present',
- ){
+  TargetSpec $nodes,
+  String $package,
+  Variant[Enum['absent', 'present'], String ] $ensure = 'present',
+){
+  apply_prep($nodes)
 
- apply_prep($nodes)
+  apply($nodes){
+    include chocolatey
 
-apply($nodes){
-  include chocolatey
- }
-apply($nodes){
-  package { $package :
-    ensure    => $ensure,
-    provider  => 'chocolatey',
+    package { $package :
+      ensure    => $ensure,
+      provider  => 'chocolatey',
+      }
     }
   }
 }
 ```
-
 Take note of the following features of the plan:
 
 - It has three parameters: the `TargetSpec`, a `package` string for the package name, and the `ensure` state of the package which allows for version, absent or present.
@@ -292,7 +283,7 @@ puppetdb_fact
 3. Run the plan with the `bolt plan run` command: 
 
 ```
-bolt plan run puppet_choco_tap::installer package=frogsay --nodes=win --password
+bolt plan run puppet_choco_tap::installer package=frogsay --targets=windows
 ```
 
 The output looks like this:
@@ -311,7 +302,7 @@ Finished: plan puppet_choco_tap::installer in 74.63 sec
 4. To check that the installation worked, run the following `frogsay` command: 
 
 ```        
-bolt command run 'frogsay ribbit' --targets windows --password
+bolt command run 'frogsay ribbit' --targets=windows 
 ```
 
 The result will vary on each server, and will look something like this:
