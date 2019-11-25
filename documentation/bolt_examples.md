@@ -191,7 +191,7 @@ Ran on 3 nodes in 0.20 seconds
 
 Bolt uses a `Puppetfile` to install module content from the Forge. A `Puppetfile` is a formatted text file that specifies the modules and data you want in each environment.
 
-1. Create a file named `Puppetfile` in the project directory — which describes the Forge content you want to install: 
+1. Create a file named `Puppetfile` in the project directory, with the Forge content you want to install: 
 
 ```     
 # Modules from the Puppet Forge
@@ -209,7 +209,7 @@ mod 'puppetlabs-registry', '2.1.0'
 
 Note that you can install modules from a number of different sources. For more information, see the [Puppetfile readme](https://github.com/puppetlabs/r10k/blob/master/doc/puppetfile.mkd#examples).
 
-2. Add the Puppetfile to a version control service, for example, Github.
+2. Add the Puppetfile to a remote repository, for example, GitHub.
 
 3. Add the following code to the Puppetfile — with your git user account: 
 
@@ -265,13 +265,17 @@ Take note of the following features of the plan:
 - The first `apply` block installs the Chocolatey package manager. The Chocolatey provider is also deployed as a library with the Puppet agent in `apply_prep`.
 - The second `apply` block installs a specified package using the Chocolatey provider.
 
-2. To verify that the `puppet_chocolatey_tap` plan is available, run the following command: 
+2. To verify that the `puppet_choco_tap::installer` plan is available, add and commit your code to your remote repository, and run the following command again:
+
+`bolt puppetfile deploy`
+
+Then run:
 
 ```
 bolt plan show
 ```
 
-The output looks like this:
+The output should look like:
 
 ```
 facts
