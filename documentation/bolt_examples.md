@@ -228,7 +228,7 @@ After it runs, you can see a `modules` directory inside the project directory, c
 
 ### 3. Write a Bolt plan to apply Puppet code and orchestrate the deployment of a package resource using the Chocolatey provider. Plans allow you to run more than one task with a single command.
 
-1. Inside your project directory, in a file called `/plans/installer.pp`, create a plan called `puppet_chocolatey_tap::installer`. 
+1. Inside your module in a file called `/plans/installer.pp`, create a plan called `puppet_chocolatey_tap::installer`. 
 
 The folder tree should look like this:
 
