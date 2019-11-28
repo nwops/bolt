@@ -141,12 +141,10 @@ In this example, you:
 - Write a Bolt plan to apply Puppet code and orchestrate the deployment of a package resource using the Chocolatey provider.
 
 ### 1. Build a project-specific configuration using a Bolt project directory Bolt runs in the context of a project directory. This directory contains all of the configuration, code, and data loaded by Bolt.
-    
-1. Create a module using the PDK command `pdk new module puppet_choco_tap` 
 
-2. To make the module a Bolt project directory, add a `bolt.yaml` file. 
+1. Create a directory called `puppet_choco_tap` and add a bolt.yaml file. Whenever you run Bolt inside this project directory, it will load the code and configuration.
 
-3. Create an inventory file to store information about your nodes. This is stored as `inventory.yaml` by default in the project directory. Add the following code: 
+2. Create an inventory file to store information about your nodes. This is stored as `inventory.yaml` by default in the project directory. Add the following code: 
 
 ```
 groups:
@@ -191,7 +189,7 @@ Ran on 3 nodes in 0.20 seconds
 
 Bolt uses a `Puppetfile` to install module content from the Forge. A `Puppetfile` is a formatted text file that specifies the modules and data you want in each environment.
 
-1. Create a file named `Puppetfile` in the project directory, with the Forge content you want to install: 
+1 . Create a file named `Puppetfile` in the project directory, with the modules needed for this example:
 
 ```     
 # Modules from the Puppet Forge
@@ -218,7 +216,7 @@ mod 'puppet_choco_tap',
     :git    =>  'https://github.com/<your git user>/puppet_choco_tap.git'
 ```
 
-4. From inside the project directory, install the Forge content by running: 
+4. From inside the project directory, install the required modules:
 
 ```
 bolt puppetfile install
@@ -228,7 +226,11 @@ After it runs, you can see a `modules` directory inside the project directory, c
 
 ### 3. Write a Bolt plan to apply Puppet code and orchestrate the deployment of a package resource using the Chocolatey provider. Plans allow you to run more than one task with a single command.
 
-1. Inside your module in a file called `/plans/installer.pp`, create a plan called `puppet_chocolatey_tap::installer`. 
+1. Create a `site-modules` directory. This is where you will add code and local modules.
+
+2. Inside the `site-modules` directory, create a new module called `puppet_choco_tap`.
+
+3. Inside the `puppet_choco_tap` module, create a plans directory with an `init.pp file` called `/plans/installer.pp`.
 
 The folder tree should look like this:
 
@@ -237,7 +239,7 @@ The folder tree should look like this:
    └── installer.pp 
 ```
 
-2. Copy the following code into the `installer.pp` file:
+2. Create a plan called `puppet_chocolatey_tap::installer` by copying the following code into the `installer.pp` file::
 
 ```
 plan puppet_choco_tap::installer(
