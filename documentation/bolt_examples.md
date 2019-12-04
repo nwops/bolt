@@ -209,14 +209,7 @@ Note that you can install modules from a number of different sources. For more i
 
 2. Add the Puppetfile to a remote repository, for example, GitHub.
 
-3. Add the following code to the Puppetfile — with your git user account: 
-
-```     
-mod 'puppet_choco_tap',
-    :git    =>  'https://github.com/<your git user>/puppet_choco_tap.git'
-```
-
-4. From inside the project directory, install the required modules:
+3. From inside the project directory, install the required modules:
 
 ```
 bolt puppetfile install
@@ -269,7 +262,7 @@ Take note of the following features of the plan:
 
 2. To verify that the `puppet_choco_tap::installer` plan is available, add and commit your code to your remote repository, and run the following command again:
 
-`bolt puppetfile deploy`
+`bolt puppetfile install`
 
 Then run:
 
